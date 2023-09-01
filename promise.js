@@ -18,22 +18,28 @@ const FePromise = function(callback) {
     this.catchCallbackList = []
 
     if (IsFunction(callback)) {
+        try {  
+            callback((resolve) => {
+                if (this.PromiseState === STATUS[0]) {
+                    this.PromiseState = STATUS[1]
+                    this.PromiseResult = resolve
+                    requestAnimationFrame(this.exec.bind(this))
+                }
 
-        callback((resolve) => {
-            if (this.PromiseState === STATUS[0]) {
-                this.PromiseState = STATUS[1]
-                this.PromiseResult = resolve
-                requestAnimationFrame(this.exec.bind(this))
-            }
+            }, (reject) => {
+                if (this.PromiseState === STATUS[0]) {
+                    this.PromiseState = STATUS[2]
+                    this.PromiseResult = reject
+                    requestAnimationFrame(this.exec.bind(this))
+                }
 
-        }, (reject) => {
-            if (this.PromiseState === STATUS[0]) {
-                this.PromiseState = STATUS[2]
-                this.PromiseResult = reject
-                requestAnimationFrame(this.exec.bind(this))
-            }
+            })
+        } catch (error) {
+            this.PromiseState = STATUS[2]
+            this.PromiseResult = error
+            requestAnimationFrame(this.exec.bind(this))
 
-        })
+        }
     } else {
         throw ('arguments is not a function')
     }
@@ -47,7 +53,9 @@ FePromise.prototype = {
         if (IsFunction(rejectCb)) {
             this.rejectCallbackList.push({ index: this.index, cb: rejectCb })
         }
-        this.index += 1;
+        if (IsFunction(resolveCb) || IsFunction(rejectCb)) {
+            this.index += 1;
+        }
         return this
     },
     catch: function(catchCb) {
@@ -59,21 +67,27 @@ FePromise.prototype = {
     exec: function() {
         if (this.PromiseState !== STATUS[0]) {
             if (this.PromiseState === STATUS[1]) {
-                let valueFlag = true
+                let value = this.PromiseResult
                 this.resolveCallbackList.forEach(({ cb }) => {
-                    cb(valueFlag ? this.PromiseResult : undefined)
-                    valueFlag = false
+                    if(IsFunction(cb)) {
+                        value = cb(value)
+                        if (value instanceof FePromise) {
+                            value = value.PromiseResult
+                        }
+                    }
                 });
             } else {
                 let [catchCb] = this.catchCallbackList
                 IsFunction(catchCb) && catchCb(this.PromiseResult)
 
-                let [{ index, cb: rejectCb }] = this.rejectCallbackList
-                IsFunction(rejectCb) && rejectCb(this.PromiseResult)
-
-                this.resolveCallbackList.slice(++index).forEach(resolveCb => {
-                    resolveCb(undefined)
-                });
+                if ( this.rejectCallbackList.length) {
+                    let [{ index, cb: rejectCb }] = this.rejectCallbackList
+                    IsFunction(rejectCb) && rejectCb(this.PromiseResult)
+                
+                    this.resolveCallbackList.slice(++index).forEach(({ cb: resolveCb }) => {
+                        IsFunction(resolveCb) && resolveCb(undefined)
+                    });
+                }
             }
         }
     }
@@ -84,60 +98,39 @@ const p = new FePromise((resolve, reject) => {
     setTimeout(() => {
         resolve(4567)
     }, 0)
+    // console.log('%c [  ]-142', 'font-size:13px; background:pink; color:#bf2c9f;', aaa)
     resolve(456)
-    reject(445566)
+    // reject(445566)
 
     // setTimeout(() => {
     //     reject(4567)
     // }, 10)
-
     // reject(4567)
 })
 p.then(e => {
     console.log('then: ', e);
-}).then(e => {
-    console.log('then2: ', e);
-}).then(e => {
+    return 'p .then - 1'
+}).then(1).then(e => {
     console.log('then3: ', e);
-}, (e) => {
-    console.log('then3: reject', e);
-})
-p.catch(e => {
-    console.log('catch: ', e);
-}).catch(e => {
-    console.log('catch2: ', e);
-}).catch(e => {
-    console.log('catch3: ', e);
-})
-
-
-
-// const p = new FePromise() // 'arguments is not a function'
-
-
-// console.log(p, FePromise.prototype)
-
-const pp = new Promise((resolve, reject) => {
-    // console.log('Promise');
-    setTimeout(() => {
-        resolve(1234)
-    }, 0)
-    resolve(123)
-    resolve(112233)
-})
-pp.then(e => {
+    // return new FePromise((resolve, reject) => {
+    //     resolve(445566)
+    // })
+},(e) => {
+    console.log('p then3: reject', e);
+}).then(e => {
     console.log('then: ', e);
+    // return 'p .then - 2'
 }).then(e => {
-    console.log('then2: ', e);
-}).then(e => {
-    console.log('then3: ', e);
-}, (e) => {
-    console.log('then3: reject', e);
-})
-pp.catch(e => {
-    console.log('catch: ', e);
+    console.log('then: ', e);
 }).catch(e => {
     console.log('catch2: ', e);
 }).catch(e => {
     console.log('catch3: ', e);
 })
+   
+p.catch(e => {
+    console.log('catch22: ', e);
+}).catch(e => {
+    console.log('catch33: ', e);
+})
+
