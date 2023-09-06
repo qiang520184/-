@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 
+        // 柯里化 主要体现在函数里面返回函数
+        // 柯里化 参数的复用
+        // 柯里化 延迟执行
+
+        function fn(width) {
+            return (height) => {
+                return width + height
+            }
+        }
+        let a = fn(10)
+        console.log(a(10));
+    </script>
+</body>
+
+</html>
