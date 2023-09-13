@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            pad: 0;
+        }
+        html,body, .wrap {
+            width: 1000px;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+        }
+        .wrap {
+            overflow: hidden;
+            border: 1px solid red;
+        }
+
+        .left {
+            width: 500px;
+            background: green;
+        }
+        @keyframes left-to-max {
+            0% {
+                width: 500px;
+            }
+            100% {
+                width: 900px;
+            }
+        }
+        @keyframes left-to-min {
+            0% {
+                width: 900px;
+            }
+            100% {
+                width: 500px;
+            }
+        }
+        @keyframes right-to-max {
+            0% {
+                width: 100px;
+            }
+            100% {
+                width: 500px;
+            }
+        }
+        @keyframes right-to-min {
+            0% {
+                width: 500px;
+            }
+            100% {
+                width: 100px;
+            }
+        }
+        .left-to-max {
+            animation: left-to-max .5s;
+            animation-fill-mode: forwards;
+        }
+        .left-to-min {
+            animation: left-to-min .5s;
+            animation-fill-mode: forwards;
+        }
+
+        .right-to-max {
+            animation: right-to-max .5s;
+            animation-fill-mode: forwards;
+        }
+        .right-to-min {
+            animation: right-to-min .5s;
+            animation-fill-mode: forwards;
+        }
+
+        .right {
+            width: 500px;
+            background: blue;
+        }
+        .min-right {
+            width: 100px;
+        }
+        .yellow {
+            width: 500px;
+            height: 50%;
+            background: yellow;
+        }
+        #change {
+            width: 80px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <button id="change">
+        变
+    </button>
+    <div class="wrap">
+        <div id="left" class="left">
+
+        </div>
+        <div id="right" class="right">
+            <div class="yellow">
+                <p>
+                    wa ha ha wa ha hawa ha hawa ha hawa h
+                </p>
+                <h1>
+                    xi xi  xi xi xi xi xi xi xi xi 
+                </h1>
+            </div>
+        </div>
+    </div>
+    <script>
+        let maxStatus =  false
+        let change = document.getElementById('change')
+        let left = document.getElementById('left')
+        let right = document.getElementById('right')
+
+
+        change.onclick = () => {
+            maxStatus = !maxStatus;
+            if (maxStatus) {
+                left.className = 'left left-to-max'
+                right.className = 'right right-to-min'
+
+            } else {
+                left.className = 'left left-to-min'
+                right.className = 'right right-to-max'
+            }
+            console.log('%c [  ]-65', 'font-size:13px; background:pink; color:#bf2c9f;', left.className, right )
+        }
+
+    </script>
+</body>
+</html>

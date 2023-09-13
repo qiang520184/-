@@ -23,21 +23,21 @@ const FePromise = function(callback) {
                 if (this.PromiseState === STATUS[0]) {
                     this.PromiseState = STATUS[1]
                     this.PromiseResult = resolve
-                    requestAnimationFrame(this.exec.bind(this))
+                    queueMicrotask(this.exec.bind(this))
                 }
 
             }, (reject) => {
                 if (this.PromiseState === STATUS[0]) {
                     this.PromiseState = STATUS[2]
                     this.PromiseResult = reject
-                    requestAnimationFrame(this.exec.bind(this))
+                    queueMicrotask(this.exec.bind(this))
                 }
 
             })
         } catch (error) {
             this.PromiseState = STATUS[2]
             this.PromiseResult = error
-            requestAnimationFrame(this.exec.bind(this))
+            queueMicrotask(this.exec.bind(this))
 
         }
     } else {
@@ -98,8 +98,9 @@ const p = new FePromise((resolve, reject) => {
     setTimeout(() => {
         resolve(4567)
     }, 0)
-    // console.log('%c [  ]-142', 'font-size:13px; background:pink; color:#bf2c9f;', aaa)
     resolve(456)
+    // resolve(45678)
+
     // reject(445566)
 
     // setTimeout(() => {
@@ -112,9 +113,9 @@ p.then(e => {
     return 'p .then - 1'
 }).then(1).then(e => {
     console.log('then3: ', e);
-    // return new FePromise((resolve, reject) => {
-    //     resolve(445566)
-    // })
+    return new FePromise((resolve, reject) => {
+        resolve(445566)
+    })
 },(e) => {
     console.log('p then3: reject', e);
 }).then(e => {
@@ -127,7 +128,6 @@ p.then(e => {
 }).catch(e => {
     console.log('catch3: ', e);
 })
-   
 p.catch(e => {
     console.log('catch22: ', e);
 }).catch(e => {

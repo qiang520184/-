@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="./promise.js"></script>
+
+
+
+    <script>
+
+        new Promise(resolve => {
+            resolve();
+        }).then(() => {
+            console.log('out 1');
+            new Promise(resolve => {
+                resolve();
+            }).then(() => {
+                console.log('inner 1');
+            }).then(() => {
+                console.log('inner 2');
+            })
+        }).then(() => {
+            console.log('out 2');
+        })
+
+        // Promise.resolve()
+        //     .then(() => {
+
+        //         console.log('%c [  ]-20', 'font-size:13px; background:pink; color:#bf2c9f;', 0)
+        //         return Promise.resolve(4)
+        //     }).then((e) => {
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', e)
+        //     })
+        //     .then((e) => {
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', e)
+        //     })
+        //     .then((e) => {
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', e)
+        //     })
+        //     .then((e) => {
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', e)
+        //     })
+
+        // Promise.resolve()
+        //     .then(() => {
+
+        //         console.log('%c [  ]-31', 'font-size:13px; background:pink; color:#bf2c9f;', 1)
+        //     }).then((e) => {
+
+
+        //         console.log('%c [  ]-34', 'font-size:13px; background:pink; color:#bf2c9f;', 2)
+        //     })
+        //     .then((e) => {
+
+        //         console.log('%c [  ]-39', 'font-size:13px; background:pink; color:#bf2c9f;', 3)
+        //     })
+        //     .then((e) => {
+
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', 5)
+        //     })
+
+
+
+        // Promise.resolve()
+        //     .then(() => {
+
+        //         console.log('%c [  ]-31', 'font-size:13px; background:pink; color:#bf2c9f;', 11)
+        //     }).then((e) => {
+
+
+        //         console.log('%c [  ]-34', 'font-size:13px; background:pink; color:#bf2c9f;', 22)
+        //     })
+        //     .then((e) => {
+
+        //         console.log('%c [  ]-39', 'font-size:13px; background:pink; color:#bf2c9f;', 33)
+        //     })
+        //     .then((e) => {
+
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', 55)
+        //     })
+        //     .then((e) => {
+
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', 66)
+        //     })
+        //     .then((e) => {
+
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', 77)
+        //     })
+        //     .then((e) => {
+
+        //         console.log('%c [  ]-23', 'font-size:13px; background:pink; color:#bf2c9f;', 88)
+        //     })
+
+
+    </script>
+</body>
+
+</html>
